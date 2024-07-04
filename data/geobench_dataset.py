@@ -29,6 +29,8 @@ GEOBENCH_TASK = {
     "m-SA-crop-type": "segmentation",
 }
 
+BENCHMARK_DIR = Path('/work/data/geobench')
+
 
 class GeobenchDataset(Dataset):
     """paper introducing Geobench: https://arxiv.org/abs/2306.03831"""
@@ -76,6 +78,9 @@ class GeobenchDataset(Dataset):
 
     @staticmethod
     def get_task(dataset_name: str) -> Tuple[TaskSpecifications, str]:
+
+        
+        
         benchmark_name = GEOBENCH_TASK[dataset_name]
         benchmark_name_ = ""
         if benchmark_name == "classification":
@@ -83,7 +88,7 @@ class GeobenchDataset(Dataset):
         elif benchmark_name == "segmentation":
             benchmark_name_ = "segmentation_v1.0/"
         task = None
-        for task_ in geobench.task_iterator(benchmark_name=benchmark_name_):
+        for task_ in geobench.task_iterator(benchmark_name=benchmark_name_, benchmark_dir=BENCHMARK_DIR):
             if task_.dataset_name == dataset_name:
                 task = task_
         assert task is not None, f"couldn't find {dataset_name} in {benchmark_name_}"
